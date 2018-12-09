@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#042133"
+    android:padding="20dp"
+    tools:context="daxiniot.bttemphumidity.AlertSettingActivity">
+
+    <TextView
+        android:id="@+id/tv_temperature_high"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="温度上限(℃)："
+        android:textColor="#FFFFFF"
+        android:textSize="27sp" />
+
+    <EditText
+        android:id="@+id/et_temp_high"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tv_temperature_high"
+        android:gravity="center"
+        android:inputType="number"
+        android:textColor="#FFFFFF"
+        android:textSize="27sp" />
+
+    <TextView
+        android:id="@+id/tv_temperature_low"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_temperature_high"
+        android:layout_marginTop="20dp"
+        android:text="温度下限(℃)："
+        android:textColor="#FFFFFF"
+        android:textSize="27sp" />
+
+    <EditText
+        android:id="@+id/et_temp_low"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_temp_high"
+        android:layout_toRightOf="@id/tv_temperature_low"
+        android:gravity="center"
+        android:inputType="number"
+        android:textColor="#FFFFFF"
+        android:textSize="27sp" />
+
+
+    <TextView
+        android:id="@+id/tv_humidity_high"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_temperature_low"
+        android:layout_marginTop="20dp"
+        android:text="湿度上限(%)："
+        android:textColor="#FFFFFF"
+        android:textSize="27sp" />
+
+    <EditText
+        android:id="@+id/et_humidity_high"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_temp_low"
+        android:layout_toRightOf="@id/tv_humidity_high"
+        android:gravity="center"
+        android:inputType="number"
+        android:textColor="#FFFFFF"
+        android:textSize="27sp" />
+
+
+    <TextView
+        android:id="@+id/tv_humidity_low"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_humidity_high"
+        android:layout_marginTop="20dp"
+        android:text="湿度下限(%)："
+        android:textColor="#FFFFFF"
+        android:textSize="27sp" />
+
+    <EditText
+        android:id="@+id/et_humidity_low"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_humidity_high"
+        android:layout_toRightOf="@id/tv_humidity_low"
+        android:gravity="center"
+        android:inputType="number"
+        android:textColor="#FFFFFF"
+        android:textSize="27sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_humidity_low"
+        android:layout_marginTop="70dp">
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="取消" />
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="保存" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

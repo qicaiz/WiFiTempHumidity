@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#042133"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tv_temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="__℃"
+                android:textColor="#FFFFFF"
+                android:textSize="60sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/tv_temperature"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="15dp"
+                android:text="温度"
+                android:textColor="#FFFFFF"
+                android:textSize="27sp" />
+
+            <TextView
+                android:id="@+id/tv_temperature_alert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_temperature"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:text="温度正常"
+                android:textColor="#00FF00"
+                android:textSize="27sp" />
+            <TextView
+                android:id="@+id/tv_temperature_range"
+                android:layout_below="@id/tv_temperature_alert"
+                android:layout_centerHorizontal="true"
+                android:textColor="#FFFFFF"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:background="#FFFFFF" />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tv_humidity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="__%"
+                android:textColor="#FFFFFF"
+                android:textSize="60sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/tv_humidity"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="15dp"
+                android:text="湿度"
+                android:textColor="#FFFFFF"
+                android:textSize="27sp" />
+
+            <TextView
+                android:id="@+id/tv_humidity_alert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_humidity"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:text="湿度正常"
+                android:textColor="#00FF00"
+                android:textSize="27sp" />
+            <TextView
+                android:id="@+id/tv_humidity_range"
+                android:layout_below="@id/tv_humidity_alert"
+                android:layout_centerHorizontal="true"
+                android:textColor="#FFFFFF"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_weight="1" />
+
+</LinearLayout>
