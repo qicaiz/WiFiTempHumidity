@@ -1,6 +1,8 @@
 package com.daxiniot.wifitemphumidity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -94,11 +96,20 @@ public class MainActivity extends AppCompatActivity {
      * Socket客户端
      */
     private Socket client;
+    /**
+     * SharedPreferences用于保存温度阈值
+     */
+    private SharedPreferences mPreferences;
+    private SharedPreferences.Editor mEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //获取当前Activity的sharedPreference,onCreate函数之前不能调用getPreference
+        mPreferences = getPreferences(Activity.MODE_PRIVATE);
+        //创建preference的editor对象
+        mEditor = mPreferences.edit();
         //实例化控件
         mTemperatureTv = findViewById(R.id.tv_temperature);
         mHumidityTv = findViewById(R.id.tv_humidity);
@@ -106,8 +117,14 @@ public class MainActivity extends AppCompatActivity {
         mHumidityAlert = findViewById(R.id.tv_humidity_alert);
         mTemperatureRangeTv = findViewById(R.id.tv_temperature_range);
         mHumidityRangeTv = findViewById(R.id.tv_humidity_range);
-        mTemperatureRangeTv.setText("(" + mTempLow + " - " + mTempHigh + "℃)");
-        mHumidityRangeTv.setText("(" + mHumidityLow + " - " + mHumidityHigh + "%)");
+
+        String tempLow = mPreferences.getString(Constants.TEMPERATURE_LOW_KEY, Constants.TEMPERATURE_LOW_VALUE);
+        String tempHigh = mPreferences.getString(Constants.TEMPERATURE_HIGH_KEY,Constants.TEMPERATURE_HIGH_VALUE);
+        mTemperatureRangeTv.setText("(" + tempLow + " - " + tempHigh + "℃)");
+        String humidityLow = mPreferences.getString(Constants.HUMIDITY_LOW_KEY, Constants.HUMIDITY_LOW_VALUE);
+        String humidityHigh = mPreferences.getString(Constants.HUMIDITY_HIGH_KEY,Constants.HUMIDITY_HIGH_VALUE);
+        mHumidityRangeTv.setText("(" + humidityLow + " - " + humidityHigh + "%)");
+
         mLineChart = findViewById(R.id.chart);
         //初始化图表属性
         initChart();
@@ -247,11 +264,13 @@ public class MainActivity extends AppCompatActivity {
      * @param temperature
      */
     private void doCheckTemperatureAlert(int temperature) {
+        String tempLow = mPreferences.getString(Constants.TEMPERATURE_LOW_KEY, Constants.TEMPERATURE_LOW_VALUE);
+        String tempHigh = mPreferences.getString(Constants.TEMPERATURE_HIGH_KEY,Constants.TEMPERATURE_HIGH_VALUE);
         //判断温度是否超出告警阈值
-        if (temperature > Integer.valueOf(mTempHigh)) {
+        if (temperature > Integer.valueOf(tempHigh)) {
             mTemperatureAlert.setText("温度过高");
             mTemperatureAlert.setTextColor(Color.RED);
-        } else if (temperature < Integer.valueOf(mTempLow)) {
+        } else if (temperature < Integer.valueOf(tempLow)) {
             mTemperatureAlert.setText("温度偏低");
             mTemperatureAlert.setTextColor(Color.RED);
         } else {
@@ -266,10 +285,12 @@ public class MainActivity extends AppCompatActivity {
      * @param humidity
      */
     private void doCheckHumidityAlert(int humidity) {
-        if (humidity > Integer.valueOf(mHumidityHigh)) {
+        String humidityLow = mPreferences.getString(Constants.HUMIDITY_LOW_KEY, Constants.HUMIDITY_LOW_VALUE);
+        String humidityHigh = mPreferences.getString(Constants.HUMIDITY_HIGH_KEY,Constants.HUMIDITY_HIGH_VALUE);
+        if (humidity > Integer.valueOf(humidityHigh)) {
             mHumidityAlert.setText("湿度过高");
             mHumidityAlert.setTextColor(Color.RED);
-        } else if (humidity < Integer.valueOf(mHumidityLow)) {
+        } else if (humidity < Integer.valueOf(humidityLow)) {
             mHumidityAlert.setText("湿度偏低");
             mHumidityAlert.setTextColor(Color.RED);
         } else {
@@ -289,12 +310,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constants.ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            mTempHigh = data.getStringExtra(Constants.TEMP_HIGH_SETTING);
-            mTempLow = data.getStringExtra(Constants.TEMP_LOW_SETTING);
-            mHumidityHigh = data.getStringExtra(Constants.HUMIDITY_HIGH_SETTING);
-            mHumidityLow = data.getStringExtra(Constants.HUMIDITY_LOW_SETTING);
-            mTemperatureRangeTv.setText("(" + mTempLow + " - " + mTempHigh + "℃)");
-            mHumidityRangeTv.setText("(" + mHumidityLow + " - " + mHumidityHigh + "%)");
+            String tempLow = data.getStringExtra(Constants.TEMP_LOW_SETTING);
+            String tempHigh = data.getStringExtra(Constants.TEMP_HIGH_SETTING);
+            String humidityLow = data.getStringExtra(Constants.HUMIDITY_LOW_SETTING);
+            String humidityHigh = data.getStringExtra(Constants.HUMIDITY_HIGH_SETTING);
+
+            mEditor.putString(Constants.TEMPERATURE_LOW_KEY, tempLow).commit();
+            mEditor.putString(Constants.TEMPERATURE_HIGH_KEY, tempHigh).commit();
+            mEditor.putString(Constants.HUMIDITY_LOW_KEY, humidityLow).commit();
+            mEditor.putString(Constants.HUMIDITY_HIGH_KEY, humidityHigh).commit();
+
+            mTemperatureRangeTv.setText("(" + tempLow + " - " + tempHigh + "℃)");
+            mHumidityRangeTv.setText("(" + humidityLow + " - " + humidityHigh + "%)");
+
         }
     }
 
@@ -320,10 +348,14 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.alert_settings) {
             Intent intent = new Intent(MainActivity.this, AlertSettingActivity.class);
-            intent.putExtra(Constants.TEMP_HIGH_SETTING, mTempHigh);
-            intent.putExtra(Constants.TEMP_LOW_SETTING, mTempLow);
-            intent.putExtra(Constants.HUMIDITY_HIGH_SETTING, mHumidityHigh);
-            intent.putExtra(Constants.HUMIDITY_LOW_SETTING, mHumidityLow);
+            String tempLow = mPreferences.getString(Constants.TEMPERATURE_LOW_KEY, Constants.TEMPERATURE_LOW_VALUE);
+            String tempHigh = mPreferences.getString(Constants.TEMPERATURE_HIGH_KEY,Constants.TEMPERATURE_HIGH_VALUE);
+            String humidityLow = mPreferences.getString(Constants.HUMIDITY_LOW_KEY, Constants.HUMIDITY_LOW_VALUE);
+            String humidityHigh = mPreferences.getString(Constants.HUMIDITY_HIGH_KEY,Constants.HUMIDITY_HIGH_VALUE);
+            intent.putExtra(Constants.TEMP_HIGH_SETTING, tempHigh);
+            intent.putExtra(Constants.TEMP_LOW_SETTING, tempLow);
+            intent.putExtra(Constants.HUMIDITY_HIGH_SETTING, humidityHigh);
+            intent.putExtra(Constants.HUMIDITY_LOW_SETTING, humidityLow);
             startActivityForResult(intent, Constants.ACTIVITY_REQUEST_CODE);
         }
         return true;
